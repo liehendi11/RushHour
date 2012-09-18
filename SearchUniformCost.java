@@ -47,6 +47,7 @@ public class SearchUniformCost implements Search {
             // Retrieve the UCSState
             UCSState wrapper = queue.poll();                    // Retrieve the best looking state.
             long stateId = wrapper.getStateId();
+            // TODO: Poll until queueMap.containsKey(stateId).
             int tmpCost = wrapper.getCost();
             Action tmpAction = wrapper.getAction();             // TODO: Re-fucking-name.
             s.setState(stateId);                                // Apply the state.
@@ -63,10 +64,12 @@ public class SearchUniformCost implements Search {
                 s.make(action);
                 long newStateId = s.getStateID();
                 if (!explored.containsKey(newStateId)) {
-                    UCSState queueElement = findElement(s);
+                    UCSState queueElement = findElement(s);     // TODO: O(n)
+                    // TODO: queueElement = mapQueue.get(s);
                     if (queueElement == null) {                 // None found.
                         queue.offer(new UCSState(totalCostOfAction, newStateId, action));
                     } else if (queueElement.getCost() > totalCostOfAction) { // Some found but does it have higher cost?
+                        // TODO: Remove from hash map, but not from priority queue.
                         queue.remove(queueElement);
                         queue.add(new UCSState(totalCostOfAction, newStateId, action));
                     }

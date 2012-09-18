@@ -80,9 +80,9 @@
       <file leaf-file-name="RushHour.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/RushHour.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="70" column="35" selection-start="2673" selection-end="2673" vertical-scroll-proportion="-11.538462">
+            <state line="116" column="32" selection-start="4761" selection-end="4761" vertical-scroll-proportion="-40.807693">
               <folding>
-                <element signature="e#0#4800#0" expanded="true" />
+                <element signature="e#0#5301#0" expanded="true" />
                 <element signature="imports" expanded="true" />
               </folding>
             </state>
@@ -92,13 +92,13 @@
       <file leaf-file-name="SearchUniformCost.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/SearchUniformCost.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="23" column="35" selection-start="584" selection-end="594" vertical-scroll-proportion="-12.115385">
+            <state line="67" column="60" selection-start="2643" selection-end="2643" vertical-scroll-proportion="-12.115385">
               <folding>
-                <element signature="e#0#5133#0" expanded="true" />
+                <element signature="e#0#5359#0" expanded="true" />
                 <element signature="e#206#216#0" expanded="true" />
                 <element signature="e#620#630#0" expanded="true" />
                 <element signature="e#690#704#0" expanded="true" />
-                <element signature="e#2143#2151#0" expanded="true" />
+                <element signature="e#2206#2214#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -118,7 +118,7 @@
       <file leaf-file-name="README.md" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/README.md">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="12" column="36" selection-start="417" selection-end="417" vertical-scroll-proportion="0.4347826">
+            <state line="65" column="44" selection-start="6826" selection-end="6826" vertical-scroll-proportion="0.92753625">
               <folding />
             </state>
           </provider>
@@ -131,15 +131,6 @@
               <folding>
                 <element signature="e#0#17097#0" expanded="true" />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="RushHourGrid.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/RushHourGrid.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="125" column="40" selection-start="2770" selection-end="2770" vertical-scroll-proportion="0.0">
-              <folding />
             </state>
           </provider>
         </entry>
@@ -188,8 +179,8 @@
       <list>
         <option value="$PROJECT_DIR$/SearchUCS.java" />
         <option value="$PROJECT_DIR$/SearchUniformCost.txt" />
-        <option value="$PROJECT_DIR$/SearchUniformCost.java" />
         <option value="$PROJECT_DIR$/PQMapHybrid.java" />
+        <option value="$PROJECT_DIR$/SearchUniformCost.java" />
         <option value="$PROJECT_DIR$/RushHour.java" />
         <option value="$PROJECT_DIR$/README.md" />
       </list>
@@ -769,32 +760,9 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/RushHourState.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="64" column="34" selection-start="2932" selection-end="2933" vertical-scroll-proportion="-11.538462">
-          <folding>
-            <element signature="e#0#17097#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/RushHourGrid.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="125" column="40" selection-start="2770" selection-end="2770" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/SearchAStar.java">
       <provider selected="true" editor-type-id="text-editor">
         <state line="13" column="30" selection-start="318" selection-end="318" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/SearchDFS.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="30" column="30" selection-start="775" selection-end="807" vertical-scroll-proportion="-13.269231">
           <folding />
         </state>
       </provider>
@@ -808,24 +776,47 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/SearchDFS.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="30" column="30" selection-start="775" selection-end="807" vertical-scroll-proportion="-13.269231">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/RushHourGrid.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="125" column="40" selection-start="2770" selection-end="2770" vertical-scroll-proportion="4.2505856">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/RushHourState.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="64" column="34" selection-start="2932" selection-end="2933" vertical-scroll-proportion="-11.538462">
+          <folding>
+            <element signature="e#0#17097#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/SearchUniformCost.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="23" column="35" selection-start="584" selection-end="594" vertical-scroll-proportion="-12.115385">
+        <state line="67" column="60" selection-start="2643" selection-end="2643" vertical-scroll-proportion="-12.115385">
           <folding>
-            <element signature="e#0#5133#0" expanded="true" />
+            <element signature="e#0#5359#0" expanded="true" />
             <element signature="e#206#216#0" expanded="true" />
             <element signature="e#620#630#0" expanded="true" />
             <element signature="e#690#704#0" expanded="true" />
-            <element signature="e#2143#2151#0" expanded="true" />
+            <element signature="e#2206#2214#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/RushHour.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="70" column="35" selection-start="2673" selection-end="2673" vertical-scroll-proportion="-11.538462">
+        <state line="116" column="32" selection-start="4761" selection-end="4761" vertical-scroll-proportion="-40.807693">
           <folding>
-            <element signature="e#0#4800#0" expanded="true" />
+            <element signature="e#0#5301#0" expanded="true" />
             <element signature="imports" expanded="true" />
           </folding>
         </state>
@@ -833,7 +824,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/README.md">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="12" column="36" selection-start="417" selection-end="417" vertical-scroll-proportion="0.4347826">
+        <state line="65" column="44" selection-start="6826" selection-end="6826" vertical-scroll-proportion="0.92753625">
           <folding />
         </state>
       </provider>

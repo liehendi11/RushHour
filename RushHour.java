@@ -68,6 +68,9 @@ public class RushHour {
             cout.write("N  | ? | Len | Cost | Nodes       | MSec  | Solution\n");
             cout.write("---+---+-----+------+-------------+-------+---------\n");
 
+            long sumNodes = 0, sumMillis = 0;
+            int sumLength = 0, sumCost = 0;
+
             for ( int n=0 ; n<puzzles.size() ; ++n ) {
                 State rhs = RushHourState.createFromFile( puzzles.get(n) );
                 if ( showBoard ) {
@@ -81,11 +84,18 @@ public class RushHour {
                 boolean solved = search.run( rhs, cost, sol );
                 long stop = System.currentTimeMillis();
 
+                sumCost += cost.value;
+                sumLength += sol.size();
+                sumNodes += search.getNodesExpanded();
+                sumMillis += (stop - start);
+
                 // Output search logistic (to console and to a file).
-                OutputInfo( cout, n, solved, search.getNodesExpanded(), cost.value, sol, stop-start );
-                OutputInfo( osw, n, solved, search.getNodesExpanded(), cost.value, sol, stop-start );
+                OutputInfo( cout, n, solved, search.getNodesExpanded(), cost.value, sol, stop-start, sol.size() );
+                OutputInfo( osw, n, solved, search.getNodesExpanded(), cost.value, sol, stop-start, sol.size() );
             }
-        cout.close();
+            cout.write("---+---+-----+------+-------------+-------+---------\n");
+            OutputInfo(cout, 0, true, sumNodes, sumCost, new ArrayList<Action>(), sumMillis, sumLength );
+            cout.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -93,14 +103,14 @@ public class RushHour {
     }
 
     static void OutputInfo( OutputStreamWriter osw, int n, boolean solved, long nodesExpanded, int cost,
-                            ArrayList<Action> sol, long tim )
+                            ArrayList<Action> sol, long tim, int solLength)
     {
         try {
             osw.write(String.format("%2s", String.valueOf(n)) + " ");
             osw.write("|");
             osw.write(String.format("%2s", String.valueOf(solved ? '1' : '0')) + " ");
             osw.write("|");
-            osw.write(String.format("%4s", String.valueOf(sol.size())) + " ");
+            osw.write(String.format("%4s", String.valueOf(solLength)) + " ");
             osw.write("|");
             osw.write(String.format("%5s", String.valueOf(cost)) + " ");
             osw.write("|");
