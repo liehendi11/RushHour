@@ -10,7 +10,6 @@ import java.io.FileWriter;
 
 public class RushHour {
 
-
     public static void main( String[] args )
     {
         boolean		  showBoard = false; // Show game board.
@@ -35,6 +34,10 @@ public class RushHour {
         puzzles.add( "puzzle00.rh" );
         puzzles.add( "puzzle01.rh" );
         puzzles.add( "puzzle02.rh" );
+
+        for (int i = 1; i <= 40; i++) {
+            puzzles.add("jam/jam" + i + ".rh");
+        }
 
         try {
             Search search = (Search)Class.forName(searchClassName).newInstance();
