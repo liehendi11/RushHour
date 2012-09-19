@@ -12,17 +12,43 @@ public class PQMapHybrid<K, V> {
 
     public PQMapHybrid() {
         queue = new PriorityQueue<V>();
+        map = new HashMap<K, V>();
     }
 
-    public void add(K key, V value) {
-
+    // TODO: ?
+    public void clear() {
+        queue.clear();
+        map.clear();
     }
 
-    public void remove(K key) {
-        // Here we do not remove from the priority queue.
-
-        // Remove from the hash map.
-        map.remove(key);
+    // O(log n) + O(1) = O(log n)
+    public void offer(K key, V value) {
+        queue.offer(value);
+        // This will update the entry if the key already exists.
+        map.put(key, value);
     }
 
+    // O(1)
+    public boolean isEmpty() {
+        return queue.isEmpty();
+    }
+
+    // O(log n)
+    public V poll() {
+        return queue.poll();
+    }
+
+    // O(1)
+    public boolean containsKey(K key) {
+        return map.containsKey(key);
+    }
+
+    // O(1) - returns null if not found.
+    public V get(K key) {
+        return map.get(key);
+    }
+
+    public PriorityQueue<V> getQueue() {
+        return queue;
+    }
 }

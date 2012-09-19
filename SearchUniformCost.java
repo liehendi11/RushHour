@@ -21,8 +21,9 @@ public class SearchUniformCost implements Search {
     // Private variables
 
     private long nodesExpanded;
-    private PriorityQueue<UCSState> queue = new PriorityQueue<UCSState>();
+    //private PriorityQueue<UCSState> queue = new PriorityQueue<UCSState>();
     private HashMap<Long, Action> explored = new HashMap<Long, Action>();
+    private PQMapHybrid<Long, UCSState> mapQueue = new PQMapHybrid<Long, UCSState>();
 
     // Public methods
 
@@ -34,24 +35,31 @@ public class SearchUniformCost implements Search {
         explored.clear();
 
         // Priority queue initialization.
-        queue.clear();                                          // Clears the priority queue.
-        queue.offer(new UCSState(0, s.getStateID()));           // Adds the root to the queue.
+        long rootStateId = s.getStateID();
+        mapQueue.clear();                                          // Clears the map-queue.
+        mapQueue.offer(rootStateId, new UCSState(0, rootStateId)); // Adds the root to the map-queue.
 
         while (true) {
-            if (queue.isEmpty()) {                              // Checks for failure.
+            if (mapQueue.isEmpty()) {                              // Checks for failure.
                 break;
             }
-            // Backups the last state id in case of the next state being a goal state.
-            // long lastStateId = s.getStateID();
 
-            // Retrieve the UCSState
-            UCSState wrapper = queue.poll();                    // Retrieve the best looking state.
-            long stateId = wrapper.getStateId();
-            // TODO: Poll until queueMap.containsKey(stateId).
-            int tmpCost = wrapper.getCost();
-            Action tmpAction = wrapper.getAction();             // TODO: Re-fucking-name.
-            s.setState(stateId);                                // Apply the state.
-            explored.put(stateId, tmpAction);
+            // Retrieve the UCSState.
+            UCSState wrapper;
+            do {
+                if (mapQueue.isEmpty()) {
+                    assert false : "Should not happen.";
+                    // Just in case there are no solutions.
+                    return false;
+                }
+                wrapper = mapQueue.poll();
+                // We CANNOT use states that have already been processed.
+            } while (explored.containsKey(wrapper.getStateId()));
+
+            long currentStateId  = wrapper.getStateId();
+            int currentCost      = wrapper.getCost();
+            s.setState(currentStateId);                                // Apply the state.
+            explored.put(currentStateId, wrapper.getAction());
             if (s.isGoal()) {                                   // Check if this is a goal state.
                 solved = true;
                 break;
@@ -60,18 +68,20 @@ public class SearchUniformCost implements Search {
             ArrayList<Action> actions = new ArrayList<Action>();
             s.getActions(actions);
             for (Action action : actions) {
-                int totalCostOfAction = tmpCost + s.getCost(action);
+                int totalCostOfAction = currentCost + s.getCost(action);
                 s.make(action);
                 long newStateId = s.getStateID();
                 if (!explored.containsKey(newStateId)) {
-                    UCSState queueElement = findElement(s);     // TODO: O(n)
-                    // TODO: queueElement = mapQueue.get(s);
-                    if (queueElement == null) {                 // None found.
-                        queue.offer(new UCSState(totalCostOfAction, newStateId, action));
-                    } else if (queueElement.getCost() > totalCostOfAction) { // Some found but does it have higher cost?
-                        // TODO: Remove from hash map, but not from priority queue.
-                        queue.remove(queueElement);
-                        queue.add(new UCSState(totalCostOfAction, newStateId, action));
+                    UCSState probed = mapQueue.get(newStateId);
+                    if (probed == null) {
+                        // Adds a new entry to both the hash map AND the priority queue.
+                        mapQueue.offer(newStateId, new UCSState(totalCostOfAction, newStateId, action));
+                    } else if (probed.getCost() > totalCostOfAction) {
+                        // Updates the entry in the hash map AND adds a new one to the priority queue.
+                        // TODO: Uncommenting the next line actually lowers the node count from
+                        // TODO: 127210 to 127152 - which is awfully fucked up.
+                        // mapQueue.getQueue().remove(probed);
+                        mapQueue.offer(newStateId, new UCSState(totalCostOfAction, newStateId, action));
                     }
                 }
                 s.retract(action);
@@ -98,16 +108,6 @@ public class SearchUniformCost implements Search {
             }
         }
         return solved;
-    }
-
-    public UCSState findElement(State element) {
-        long stateId = element.getStateID();
-        for (UCSState s : queue) {
-            if (s.getStateId() == stateId) {
-                return s;
-            }
-        }
-        return null; // None found.
     }
 
     public long getNodesExpanded() {
