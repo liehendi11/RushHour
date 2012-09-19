@@ -1,26 +1,16 @@
 //
-// AStar
+// A star
 //
 
-import java.util.ArrayList;
+class SearchAStar extends BestFirstSearch {
 
-class SearchAStar implements Search
-{
-	// Input: start state
-	// Output: cost of solution and the solution path.
-	// Returns: true if solution found, otherwise false.
-	public boolean run( State s, Cost cost, ArrayList<Action> solution )
-    {
-        // You should implement this method.
-        return false;
+    @Override
+    public int costFunction(int currentFScore, int neighbourGScore, int neighbourHScore) {
+        return neighbourGScore + neighbourHScore;
     }
 
-    // Get number of nodes expanded.
-	public long getNodesExpanded()
-    {
-        return m_nodesExpanded;
+    @Override
+    public int initialFScore(State s) {
+        return s.getHeuristic();
     }
-
-    ///////// Private ///////////
-	private long m_nodesExpanded;
 }
