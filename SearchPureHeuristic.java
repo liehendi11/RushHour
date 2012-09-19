@@ -1,18 +1,17 @@
 
 //
-// Uniform Cost-Search
+// Pure-Heuristic Search
 //
 
 import java.util.*;
 
-public class SearchUniformCost implements Search {
+public class SearchPureHeuristic implements Search {
 
     // Private variables
 
     private long nodesExpanded;
-    //private PriorityQueue<UCSState> queue = new PriorityQueue<UCSState>();
     private HashMap<Long, Action> explored = new HashMap<Long, Action>();
-    private PQMapHybrid<Long, UCSState> mapQueue = new PQMapHybrid<Long, UCSState>();
+    private PQMapHybrid<Long, PHSState> mapQueue = new PQMapHybrid<Long, PHSState>();
 
     // Public methods
 
@@ -26,7 +25,7 @@ public class SearchUniformCost implements Search {
         // Priority queue initialization.
         long rootStateId = s.getStateID();
         mapQueue.clear();                                          // Clears the map-queue.
-        mapQueue.offer(rootStateId, new UCSState(0, rootStateId)); // Adds the root to the map-queue.
+        mapQueue.offer(rootStateId, new PHSState(s.getHeuristic(), rootStateId));
 
         while (true) {
             if (mapQueue.isEmpty()) {                              // Checks for failure.
@@ -34,7 +33,7 @@ public class SearchUniformCost implements Search {
             }
 
             // Retrieve the UCSState.
-            UCSState wrapper;
+            PHSState wrapper;
             do {
                 if (mapQueue.isEmpty()) {
                     assert false : "Should not happen.";
@@ -46,7 +45,7 @@ public class SearchUniformCost implements Search {
             } while (explored.containsKey(wrapper.getStateId()));
 
             long currentStateId  = wrapper.getStateId();
-            int currentCost      = wrapper.getCost();
+            int currentCost      = wrapper.getHeuristic();
             s.setState(currentStateId);                                // Apply the state.
             explored.put(currentStateId, wrapper.getAction());
             if (s.isGoal()) {                                   // Check if this is a goal state.
@@ -57,20 +56,20 @@ public class SearchUniformCost implements Search {
             ArrayList<Action> actions = new ArrayList<Action>();
             s.getActions(actions);
             for (Action action : actions) {
-                int totalCostOfAction = currentCost + s.getCost(action);
                 s.make(action);
+                int totalCostOfAction = currentCost + s.getHeuristic();
                 long newStateId = s.getStateID();
                 if (!explored.containsKey(newStateId)) {
-                    UCSState probed = mapQueue.get(newStateId);
+                    PHSState probed = mapQueue.get(newStateId);
                     if (probed == null) {
                         // Adds a new entry to both the hash map AND the priority queue.
-                        mapQueue.offer(newStateId, new UCSState(totalCostOfAction, newStateId, action));
-                    } else if (probed.getCost() > totalCostOfAction) {
+                        mapQueue.offer(newStateId, new PHSState(totalCostOfAction, newStateId, action));
+                    } else if (probed.getHeuristic() > totalCostOfAction) {
                         // Updates the entry in the hash map AND adds a new one to the priority queue.
                         // TODO: Uncommenting the next line actually lowers the node count from
                         // TODO: 127210 to 127152 - which is awfully fucked up.
                         // mapQueue.getQueue().remove(probed);
-                        mapQueue.offer(newStateId, new UCSState(totalCostOfAction, newStateId, action));
+                        mapQueue.offer(newStateId, new PHSState(totalCostOfAction, newStateId, action));
                     }
                 }
                 s.retract(action);
@@ -105,28 +104,28 @@ public class SearchUniformCost implements Search {
 
 }
 
-class UCSState implements Comparable<UCSState> {
+class PHSState implements Comparable<PHSState> {
 
-    private int cost;
+    private int heuristic;
     private long stateId;
     private Action action;
 
-    public UCSState(int cost, long stateId) {
+    public PHSState(int cost, long stateId) {
         this(cost, stateId, null);
     }
 
-    public UCSState(int cost, long stateId, Action action) {
-        this.cost = cost;
+    public PHSState(int cost, long stateId, Action action) {
+        this.heuristic = cost;
         this.stateId = stateId;
         this.action = action;
     }
 
-    public int getCost() {
-        return cost;
+    public int getHeuristic() {
+        return heuristic;
     }
 
-    public void setCost(int cost) {
-        this.cost = cost;
+    public void setHeuristic(int cost) {
+        this.heuristic = cost;
     }
 
     public long getStateId() {
@@ -145,10 +144,10 @@ class UCSState implements Comparable<UCSState> {
         this.action = action;
     }
 
-    public int compareTo(UCSState other) {
-        if (this.cost > other.cost) {
+    public int compareTo(PHSState other) {
+        if (this.heuristic > other.heuristic) {
             return 1;
-        } else if (this.cost < other.cost) {
+        } else if (this.heuristic < other.heuristic) {
             return -1;
         }
         return 0;
