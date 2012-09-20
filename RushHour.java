@@ -34,6 +34,7 @@ public class RushHour {
         puzzles.add( "puzzle00.rh" );
         puzzles.add( "puzzle01.rh" );
         puzzles.add( "puzzle02.rh" );
+        //puzzles.add("jam/test.rh");
 
         for (int i = 1; i <= 40; i++) {
             puzzles.add("jam/jam" + i + ".rh");
