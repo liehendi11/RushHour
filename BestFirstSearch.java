@@ -88,9 +88,8 @@ public abstract class BestFirstSearch implements Search {
                         mapQueue.offer(newStateId, new SearchNode(neighbourFScore, neighbourGScore, newStateId, action));
                     } else if (probed.getGScore() > neighbourGScore) {
                         // Updates the entry in the hash map AND adds a new one to the priority queue.
-                        // TODO: Uncommenting the next line actually lowers the node count from
-                        // TODO: 127210 to 127152 - which is awfully fucked up.
-                        mapQueue.getQueue().remove(probed);
+                        // TODO: Alter this? Yeah - alter this.
+                        // mapQueue.getQueue().remove(probed);
                         mapQueue.offer(newStateId, new SearchNode(neighbourFScore, neighbourGScore, newStateId, action));
                     }
                 }

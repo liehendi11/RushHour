@@ -13,4 +13,5 @@ class SearchAStar extends BestFirstSearch {
     public int initialFScore(State s) {
         return s.getHeuristic();
     }
+
 }
