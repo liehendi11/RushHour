@@ -25,7 +25,6 @@ class SearchIDAStar implements Search {
         nodesExpanded = 0;
         boolean solved;
         int threshold = heuristic.estimateCost(state); // f(x) = g(x) + h(x) = 0 + h(x)
-
         while (true) {
             IDAReturnValue ret = IDAStar(state, state.getStateID(), 0, threshold, cost, solution);
             solved = ret.solved;
@@ -61,8 +60,8 @@ class SearchIDAStar implements Search {
             state.make(action);
             int neighbourGScore = gScore + distToNeighbour;
             int neighbourFScore = neighbourGScore + heuristic.estimateCost(state);
-
             if (neighbourFScore <= threshold) {
+
                 // Calls the search function recursively.
                 IDAReturnValue ret = IDAStar(
                         state, state.getStateID(), neighbourGScore, threshold, cost, solution);

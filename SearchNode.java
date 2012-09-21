@@ -54,8 +54,5 @@ public class SearchNode implements Comparable<SearchNode> {
         return 0;
     }
 
-    public boolean equals(SearchNode other) {
-        return this.stateId == other.getStateId();
-    }
 
 }

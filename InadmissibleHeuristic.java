@@ -62,7 +62,7 @@ public class InadmissibleHeuristic implements Heuristic {
         }
 
         // (Step 2) Add the cost of moving the red car towards the goal.
-        cost += Math.abs(upper - lower) + 2;
+        cost += exitPos.getCol() - (red.getHead().getCol() + red.getLength() - 1);
 
         return cost;
     }

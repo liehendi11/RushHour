@@ -55,7 +55,7 @@ public abstract class BestFirstSearch implements Search {
                 wrapper = mapQueue.poll();
                 currentStateId = wrapper.getStateId();
 
-                // We CANNOT use states that have already been processed.
+                // If the mapQueue does not contain the state ID, we cannot use it.
             } while (!mapQueue.containsKey(currentStateId));
 
             // Tells the HQMapHybrid that this state "is not" in the queue, even though it might

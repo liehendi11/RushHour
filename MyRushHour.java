@@ -39,12 +39,10 @@ public class MyRushHour {
             puzzles.add("jam/jam" + i + ".rh");
         }
 
-        searchClassName = "SearchUniformCost";
-
         try {
             Search search = (Search) Class.forName(searchClassName).newInstance();
-            search.setHeuristic(new DefaultHeuristic());
-            SolveOverview( searchClassName, null, showBoard, algName, search, puzzles );
+            search.setHeuristic(new InadmissibleHeuristic());
+            SolveOverview(searchClassName, null, showBoard, algName, search, puzzles);
         } catch (InstantiationException e) {
             e.printStackTrace();
         } catch (IllegalAccessException e) {
@@ -113,22 +111,22 @@ public class MyRushHour {
         try {
             osw.write(String.format("%5s", String.valueOf(n) + "/43  "));
 
-            osw.write("|");
+            osw.write("&");
             osw.write(String.format("%4s", String.valueOf(solLength)) + " ");
-            osw.write("|");
+            osw.write("&");
             osw.write(String.format("%5s", String.valueOf(cost)) + " ");
-            osw.write("|");
+            osw.write("&");
             osw.write(String.format("%12s", String.valueOf(nodesExpanded)) + " ");
-            osw.write("|");
+            osw.write("&");
             osw.write(String.format("%6s", String.valueOf(tim)) + " ");
-            osw.write("| ");
+            osw.write(" ");
             for ( int i=0; i<sol.size(); ++i )
             {
                 RushHourAction ra = (RushHourAction) sol.get(i);
                 osw.write( ra.toStr() );
                 osw.write( ' ' );
             }
-            osw.write('\n');
+            osw.write("\\\\\n");
             osw.flush();
         } catch (IOException e) {
             e.printStackTrace();
