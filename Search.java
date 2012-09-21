@@ -14,5 +14,7 @@ interface Search {
 
 	// Get number of nodes expanded.
 	public long getNodesExpanded();
+
+    public void setHeuristic(Heuristic heuristic);
 };
 

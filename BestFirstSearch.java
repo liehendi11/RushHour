@@ -1,51 +1,50 @@
-
+//
 // General BestFirstSearch class.
+//
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.PriorityQueue;
 
 public abstract class BestFirstSearch implements Search {
-
-    public static void main(String[] args) {
-        PriorityQueue<SearchNode> queue = new PriorityQueue<SearchNode>();
-        queue.offer(new SearchNode(10, 10, -1, new Action()));
-        queue.offer(new SearchNode(10, 20, -1, new Action()));
-        queue.offer(new SearchNode(10, 15, -1, new Action()));
-        for (int i = 0; i < 3; i++) {
-            SearchNode node = queue.poll();
-            System.out.println("F: " + node.getFScore() + " / G: " + node.getGScore());
-        }
-    }
 
     // Private variables
 
     private long nodesExpanded;
     private HashMap<Long, Action> explored = new HashMap<Long, Action>();
     private PQMapHybrid<Long, SearchNode> mapQueue = new PQMapHybrid<Long, SearchNode>();
+    protected Heuristic heuristic;
 
     // Public methods
 
     public boolean run(State s, Cost cost, ArrayList<Action> solution) {
+        // In case no heuristic is set.
+        if (heuristic == null) {
+            heuristic = new DefaultHeuristic();
+        }
+
+        // Initialization.
+        heuristic.initialize(s);
         nodesExpanded = 0;
         boolean solved = false;
 
         // HashMap initialization.
         explored.clear();
 
-        // Priority queue initialization.
+        // PQMapHybrid initialization.
         long rootStateId = s.getStateID();
-        int rootNodeScore = initialFScore(s);
+        int rootNodeScore = costFunction(0, s.getHeuristic());
         mapQueue.clear();
         mapQueue.offer(rootStateId, new SearchNode(rootNodeScore, rootStateId));
 
         while (true) {
-            if (mapQueue.isEmpty()) { // Checks for failure.
+            // Checks for failure.
+            if (mapQueue.isEmpty()) {
                 break;
             }
 
             // Polls until it finds a proper SearchNode.
+            long currentStateId;
             SearchNode wrapper;
             do {
                 if (mapQueue.isEmpty()) {
@@ -54,11 +53,15 @@ public abstract class BestFirstSearch implements Search {
                     return false;
                 }
                 wrapper = mapQueue.poll();
-                // We CANNOT use states that have already been processed.
-            } while (explored.containsKey(wrapper.getStateId()));
+                currentStateId = wrapper.getStateId();
 
-            long currentStateId = wrapper.getStateId();
-            int currentFScore = wrapper.getFScore();
+                // We CANNOT use states that have already been processed.
+            } while (!mapQueue.containsKey(currentStateId));
+
+            // Tells the HQMapHybrid that this state "is not" in the queue, even though it might
+            // still exist in the priority queue.
+            mapQueue.remove(wrapper.getStateId());
+
             int currentGScore = wrapper.getGScore();
             s.setState(currentStateId);
             explored.put(currentStateId, wrapper.getAction());
@@ -77,20 +80,20 @@ public abstract class BestFirstSearch implements Search {
                 // When we have made the move to the neighbour we can retrieve heuristic data and
                 // calculate the F-score.
                 int neighbourGScore = currentGScore + distToNeighbour;
-                int neighbourHScore = s.getHeuristic();
-                int neighbourFScore = costFunction(currentFScore, neighbourGScore, neighbourHScore);
+                int neighbourHScore = heuristic.estimateCost(s);
+                int neighbourFScore = costFunction(neighbourGScore, neighbourHScore);
 
                 long newStateId = s.getStateID();
                 if (!explored.containsKey(newStateId)) {
                     SearchNode probed = mapQueue.get(newStateId);
                     if (probed == null) {
                         // Adds a new entry to both the hash map AND the priority queue.
-                        mapQueue.offer(newStateId, new SearchNode(neighbourFScore, neighbourGScore, newStateId, action));
+                        mapQueue.offer(newStateId, new SearchNode(
+                                neighbourFScore, neighbourGScore, newStateId, action));
                     } else if (probed.getGScore() > neighbourGScore) {
                         // Updates the entry in the hash map AND adds a new one to the priority queue.
-                        // TODO: Alter this? Yeah - alter this.
-                        // mapQueue.getQueue().remove(probed);
-                        mapQueue.offer(newStateId, new SearchNode(neighbourFScore, neighbourGScore, newStateId, action));
+                        mapQueue.offer(newStateId, new SearchNode(
+                                neighbourFScore, neighbourGScore, newStateId, action));
                     }
                 }
                 s.retract(action);
@@ -106,14 +109,10 @@ public abstract class BestFirstSearch implements Search {
             }
             Collections.reverse(solution);
 
-            // TODO: Okay. Is there any better way to retrieve the cost?
-            //s.draw();
+            // This might not be the best way to retrieve the cost.
             for (Action action : solution) {
-                //System.out.println();
-                //System.out.println("Action: " + action.toStr());
                 cost.value += s.getCost(action);
                 s.make(action);
-                //s.draw();
             }
         }
         return solved;
@@ -123,8 +122,16 @@ public abstract class BestFirstSearch implements Search {
         return nodesExpanded;
     }
 
-    public abstract int costFunction(int currentFScore, int neighbourGScore, int neighbourHScore);
+    /**
+     *
+     * @param neighbourGScore the G-score of the neighbour node - (cost(root, current) + cost(current, neighbour))
+     * @param neighbourHScore the H-score of the neighbour - costEstimate(neighbour, goal).
+     * @return f(neighbour)
+     */
+    public abstract int costFunction(int neighbourGScore, int neighbourHScore);
 
-    public abstract int initialFScore(State s);
+    public void setHeuristic(Heuristic heuristic) {
+        this.heuristic = heuristic;
+    }
 
 }

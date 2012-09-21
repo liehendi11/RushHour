@@ -31,6 +31,10 @@ class SearchDFID implements Search
         return m_nodesExpanded;
     }
 
+    public void setHeuristic(Heuristic heuristic) {
+
+    }
+
     ///////// Private ///////////
     private long m_nodesExpanded;
 
@@ -67,5 +71,7 @@ class SearchDFID implements Search
 	    // Return the status of the search (solution found or not).
 	    return solved;
     }
+
+
 
 }

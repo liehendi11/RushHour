@@ -10,20 +10,24 @@ class SearchIDAStar implements Search {
     // Private members
 
     private long nodesExpanded;
-    private Heuristic1 heuristic = new Heuristic1();  // TODO: Change!
+    private Heuristic heuristic;
 
     // Public members
 
-	public boolean run( State s, Cost cost, ArrayList<Action> solution )
+	public boolean run( State state, Cost cost, ArrayList<Action> solution )
     {
-        heuristic.init(s);
+        // In case no heuristic is set.
+        if (heuristic == null) {
+            heuristic = new DefaultHeuristic();
+        }
+        heuristic.initialize(state);
         solution.clear();
         nodesExpanded = 0;
         boolean solved;
-        int threshold = heuristic.getHeuristic(s); // f(x) = g(x) + h(x) = 0 + h(x)
+        int threshold = heuristic.estimateCost(state); // f(x) = g(x) + h(x) = 0 + h(x)
 
         while (true) {
-            IDAReturnValue ret = IDAStar(s, s.getStateID(), 0, threshold, cost, solution);
+            IDAReturnValue ret = IDAStar(state, state.getStateID(), 0, threshold, cost, solution);
             solved = ret.solved;
             if (solved) {
                 Collections.reverse(solution);
@@ -56,7 +60,7 @@ class SearchIDAStar implements Search {
             int distToNeighbour = state.getCost(action);
             state.make(action);
             int neighbourGScore = gScore + distToNeighbour;
-            int neighbourFScore = neighbourGScore + heuristic.getHeuristic(state);
+            int neighbourFScore = neighbourGScore + heuristic.estimateCost(state);
 
             if (neighbourFScore <= threshold) {
                 // Calls the search function recursively.
@@ -80,6 +84,10 @@ class SearchIDAStar implements Search {
 
 	public long getNodesExpanded() {
         return nodesExpanded;
+    }
+
+    public void setHeuristic(Heuristic heuristic) {
+        this.heuristic = heuristic;
     }
 
 }

@@ -1,17 +1,14 @@
 //
-// A star
+// A*
 //
 
 class SearchAStar extends BestFirstSearch {
 
     @Override
-    public int costFunction(int currentFScore, int neighbourGScore, int neighbourHScore) {
+    public int costFunction(int neighbourGScore, int neighbourHScore) {
+        // neighbourGScore: cost(root -> current) + cost(current -> neighbour).
+        // neighbourHScore: costEstimate(neighbour -> goal).
         return neighbourGScore + neighbourHScore;
-    }
-
-    @Override
-    public int initialFScore(State s) {
-        return s.getHeuristic();
     }
 
 }

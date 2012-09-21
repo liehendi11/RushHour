@@ -8,16 +8,22 @@ public class SearchEnhancedIDAStar implements Search {
 
     private long nodesExpanded;
     private HashMap<Long, TransEntry> transTable = new HashMap<Long, TransEntry>();
+    private Heuristic heuristic;
 
     // Public members
 
     public boolean run( State s, Cost cost, ArrayList<Action> solution )
     {
+        // In case no heuristic is set.
+        if (heuristic == null) {
+            heuristic = new DefaultHeuristic();
+        }
+        heuristic.initialize(s);
         transTable.clear();
         solution.clear();
         nodesExpanded = 0;
         boolean solved;
-        int threshold = s.getHeuristic(); // f(x) = g(x) + h(x) = 0 + h(x)
+        int threshold = heuristic.estimateCost(s); // f(x) = g(x) + h(x) = 0 + h(x)
 
         while (true) {
             IDAReturnValue ret = EIDAStar(s, s.getStateID(), 0, threshold, cost, solution);
@@ -76,7 +82,7 @@ public class SearchEnhancedIDAStar implements Search {
                 TransEntry neighbourEntry = transTable.get(neighbourStateId);
                 neighbourHScore = neighbourEntry.hScore;
             } else {
-                neighbourHScore = state.getHeuristic();
+                neighbourHScore = heuristic.estimateCost(state); // state.getHeuristic(); // heuristic1.getHeuristic(state);
             }
 
             // f(x)
@@ -106,6 +112,10 @@ public class SearchEnhancedIDAStar implements Search {
 
     public long getNodesExpanded() {
         return nodesExpanded;
+    }
+
+    public void setHeuristic(Heuristic heuristic) {
+        this.heuristic = heuristic;
     }
 
 }

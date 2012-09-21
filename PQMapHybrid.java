@@ -38,6 +38,10 @@ public class PQMapHybrid<K, V> {
         return queue.poll();
     }
 
+    public V remove(K key) {
+        return map.remove(key);
+    }
+
     // O(1)
     public boolean containsKey(K key) {
         return map.containsKey(key);

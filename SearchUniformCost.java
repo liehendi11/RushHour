@@ -1,20 +1,13 @@
-
 //
 // Uniform Cost-Search
 //
 
-import java.util.*;
-
 public class SearchUniformCost extends BestFirstSearch {
 
     @Override
-    public int costFunction(int currentFScore, int neighbourGScore, int neighbourHScore) {
+    public int costFunction(int neighbourGScore, int neighbourHScore) {
+        // neighbourGScore: cost(root -> current) + cost(current -> neighbour).
         return neighbourGScore;
-    }
-
-    @Override
-    public int initialFScore(State s) {
-        return 0;
     }
 
 }
